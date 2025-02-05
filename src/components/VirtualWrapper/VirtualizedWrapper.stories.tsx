@@ -2,10 +2,10 @@ import React, { useRef } from 'react';
 
 import { Template } from '../../storybook/helper.stories.templates';
 import VirtualizedWrapper from './VirtualizedWrapper';
-import { VirtualizedWrapperProps, VirtualizedWrapperRefObject } from '.';
+import { VirtualizedWrapperProps } from '.';
+import { VirtualizedList } from '@momentum-design/components';
 import List from '../List';
 import ListItemBase from '../ListItemBase';
-import Text from '../Text';
 
 export default {
   title: 'Momentum UI/VirtualizedWrapper',
@@ -22,25 +22,24 @@ export default {
 const TEST_LIST_SIZE = 500;
 
 const Common = Template<VirtualizedWrapperProps>(() => {
-  const virtualizedRef = useRef<VirtualizedWrapperRefObject>();
+  const virtualizedRef = useRef<VirtualizedList>();
 
-  const renderList = (items, measureElement, style) => (
-    <List listSize={TEST_LIST_SIZE} noLoop shouldFocusOnPress shouldItemFocusBeInset style={style}>
-      {items.map((virtualRow) => {
+  const renderList = (virtualItems, measureElement, listStyle) => (
+    <List listSize={TEST_LIST_SIZE} shouldFocusOnPress shouldItemFocusBeInset style={listStyle}>
+      {virtualItems.map((virtualRow) => {
         return (
           <ListItemBase
+            itemIndex={virtualRow.index}
             ref={measureElement}
             key={virtualRow.key as string}
-            itemIndex={virtualRow.index}
             data-index={virtualRow.index}
           >
-            <Text tagName="p">{`List Item: ${virtualRow.index}`}</Text>
+            {`List Item: ${virtualRow.index}`}
           </ListItemBase>
         );
       })}
     </List>
   );
-
   return (
     <VirtualizedWrapper
       ref={virtualizedRef}

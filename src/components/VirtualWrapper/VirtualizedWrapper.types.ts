@@ -1,4 +1,4 @@
-import { PartialKeys, VirtualItem, Virtualizer, VirtualizerOptions } from '@tanstack/react-virtual';
+import { PartialKeys, VirtualItem, VirtualizerOptions } from '@tanstack/react-virtual';
 import { CSSProperties } from 'react';
 
 export interface Props
@@ -28,10 +28,5 @@ export interface Props
    * Passes current target back to client for handling
    * @param currentTarget
    */
-  onScroll?: (currentTarget: EventTarget & HTMLDivElement) => void;
-}
-
-export interface WrapperRefObject {
-  scrollRef: HTMLDivElement;
-  virtualizer: Virtualizer<HTMLDivElement, Element>;
+  handleScroll?: (e: Event) => void;
 }

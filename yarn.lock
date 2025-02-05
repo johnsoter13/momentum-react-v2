@@ -3009,6 +3009,7 @@ __metadata:
     "@swc/core": 1.4.17
     "@swc/jest": 0.2.36
     "@swc/types": 0.1.9
+    "@tanstack/lit-virtual": ^3.12.0
     "@tanstack/react-virtual": ^3.12.0
     "@testing-library/jest-dom": ^5.16.1
     "@testing-library/react": ^12.1.2
@@ -6965,6 +6966,17 @@ __metadata:
   dependencies:
     defer-to-connect: ^1.0.1
   checksum: 4d9158061c5f397c57b4988cde33a163244e4f02df16364f103971957a32886beb104d6180902cbe8b38cb940e234d9f98a4e486200deca621923f62f50a06fe
+  languageName: node
+  linkType: hard
+
+"@tanstack/lit-virtual@npm:^3.12.0":
+  version: 3.12.0
+  resolution: "@tanstack/lit-virtual@npm:3.12.0"
+  dependencies:
+    "@tanstack/virtual-core": 3.12.0
+  peerDependencies:
+    lit: ^3.1.0
+  checksum: 19d867761ee497358858d3fa2437451e3bb30e8427538e3dfc200cd54635622bf1a0e34a8eb8abe4d9e06152fc4c75423805c744d97000464925c7929bccd5e9
   languageName: node
   linkType: hard
 

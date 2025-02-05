@@ -1,51 +1,45 @@
-import React, { RefObject, forwardRef, useImperativeHandle, useRef } from 'react';
-import classnames from 'classnames';
+import React, { RefObject, forwardRef, useCallback, useEffect, useState } from 'react';
 
-import { Props, WrapperRefObject } from './VirtualizedWrapper.types';
-import { STYLE } from './VirtualizedWrapper.constants';
-import { useVirtualizer } from '@tanstack/react-virtual';
+import { Props } from './VirtualizedWrapper.types';
+import { VirtualizedList as MdcVirtualizedList } from '@momentum-design/components/dist/react';
+
 import './VirtualizedWrapper.style.scss';
+import { VirtualizedList } from '@momentum-design/components';
 
-const VirtualizedWrapper = forwardRef((props: Props, ref: RefObject<WrapperRefObject>) => {
-  const { className, onScroll, renderList, ...virtualizerProps } = props;
-
-  const scrollRef = useRef<HTMLDivElement>();
-
-  const virtualizer = useVirtualizer({
-    ...virtualizerProps,
-    getScrollElement: () => scrollRef?.current,
+const VirtualizedWrapper = forwardRef((props: Props, ref: RefObject<VirtualizedList>) => {
+  const { className, handleScroll, renderList, ...virtualizerProps } = props;
+  const [listData, setListData] = useState({
+    virtualItems: [],
+    measureElement: null,
+    listStyle: {},
   });
 
-  // Expose imperative methods
-  useImperativeHandle(ref, () => ({
-    scrollRef: scrollRef?.current,
-    virtualizer,
-  }));
+  const handleListDataChange = useCallback(
+    ({ virtualItems, measureElement, listStyle }) => {
+      if (listData.virtualItems !== virtualItems) {
+        setListData({ virtualItems, measureElement, listStyle });
+      }
+    },
+    [listData.virtualItems]
+  );
 
-  const { getVirtualItems, measureElement } = virtualizer;
-  const virtualItems = getVirtualItems();
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.virtualizerprops = virtualizerProps;
+    }
+  }, [ref, virtualizerProps]);
+
+  const { virtualItems, measureElement, listStyle } = listData;
 
   return (
-    <div
-      ref={scrollRef}
-      onScroll={(e) => onScroll && onScroll(e.currentTarget)}
-      className={classnames(className, STYLE.container)}
+    <MdcVirtualizedList
+      className={className}
+      ref={ref}
+      setlistdata={handleListDataChange}
+      handlescroll={handleScroll}
     >
-      <div
-        className={STYLE.listWrapper}
-        style={{
-          height: virtualizer.getTotalSize(),
-        }}
-      >
-        {renderList(virtualItems, measureElement, {
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          transform: `translateY(${virtualItems?.[0]?.start ?? 0}px)`,
-        })}
-      </div>
-    </div>
+      {renderList(virtualItems, measureElement, listStyle)}
+    </MdcVirtualizedList>
   );
 });
 
