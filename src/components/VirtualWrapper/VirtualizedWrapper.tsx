@@ -7,21 +7,7 @@ import './VirtualizedWrapper.style.scss';
 import { VirtualizedList } from '@momentum-design/components';
 
 const VirtualizedWrapper = forwardRef((props: Props, ref: RefObject<VirtualizedList>) => {
-  const { className, handleScroll, renderList, ...virtualizerProps } = props;
-  const [listData, setListData] = useState({
-    virtualItems: [],
-    measureElement: null,
-    listStyle: {},
-  });
-
-  const handleListDataChange = useCallback(
-    ({ virtualItems, measureElement, listStyle }) => {
-      if (listData.virtualItems !== virtualItems) {
-        setListData({ virtualItems, measureElement, listStyle });
-      }
-    },
-    [listData.virtualItems]
-  );
+  const { className, handleScroll, setListData, children, ...virtualizerProps } = props;
 
   useEffect(() => {
     if (ref.current) {
@@ -29,16 +15,14 @@ const VirtualizedWrapper = forwardRef((props: Props, ref: RefObject<VirtualizedL
     }
   }, [ref, virtualizerProps]);
 
-  const { virtualItems, measureElement, listStyle } = listData;
-
   return (
     <MdcVirtualizedList
       className={className}
       ref={ref}
-      setlistdata={handleListDataChange}
+      setlistdata={setListData}
       handlescroll={handleScroll}
     >
-      {renderList(virtualItems, measureElement, listStyle)}
+      {children}
     </MdcVirtualizedList>
   );
 });

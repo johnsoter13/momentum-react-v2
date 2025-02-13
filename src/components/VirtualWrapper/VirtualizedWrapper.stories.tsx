@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
 import { Template } from '../../storybook/helper.stories.templates';
 import VirtualizedWrapper from './VirtualizedWrapper';
@@ -22,9 +22,23 @@ export default {
 const TEST_LIST_SIZE = 500;
 
 const Common = Template<VirtualizedWrapperProps>(() => {
+  const [listData, setListData] = useState({
+    virtualItems: [],
+    measureElement: null,
+    listStyle: {},
+  });
+
+  const handleListDataChange = useCallback(
+    ({ virtualItems, measureElement, listStyle }) => {
+      if (listData.virtualItems !== virtualItems) {
+        setListData({ virtualItems, measureElement, listStyle });
+      }
+    },
+    [listData.virtualItems]
+  );
   const virtualizedRef = useRef<VirtualizedList>();
 
-  const renderList = (virtualItems, measureElement, listStyle) => (
+  const renderList = ({virtualItems, measureElement, listStyle}) => (
     <List listSize={TEST_LIST_SIZE} shouldFocusOnPress shouldItemFocusBeInset style={listStyle}>
       {virtualItems.map((virtualRow) => {
         return (
@@ -43,10 +57,12 @@ const Common = Template<VirtualizedWrapperProps>(() => {
   return (
     <VirtualizedWrapper
       ref={virtualizedRef}
-      renderList={renderList}
+      setListData={handleListDataChange}
       count={TEST_LIST_SIZE}
       estimateSize={() => 20}
-    />
+    >
+      {renderList(listData)}
+    </VirtualizedWrapper>
   );
 }).bind({});
 

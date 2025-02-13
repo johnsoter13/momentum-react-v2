@@ -1,5 +1,5 @@
-import { PartialKeys, VirtualItem, VirtualizerOptions } from '@tanstack/react-virtual';
-import { CSSProperties } from 'react';
+import { PartialKeys, VirtualizerOptions } from '@tanstack/react-virtual';
+import { ReactNode } from 'react';
 
 export interface Props
   extends PartialKeys<
@@ -18,15 +18,16 @@ export interface Props
    * @param listStyle - style to give to list
    * @returns list with nested listitems
    */
-  renderList: (
-    virtualItems: Array<VirtualItem>,
-    measureElement: (node: Element | null | undefined) => void,
-    listStyle: CSSProperties
-  ) => JSX.Element;
+  setListData: (props: any) => void;
 
   /**
    * Passes current target back to client for handling
    * @param currentTarget
    */
   handleScroll?: (e: Event) => void;
+
+  /**
+   * React node to render
+   */
+  children?: ReactNode;
 }
